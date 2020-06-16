@@ -2,51 +2,86 @@
 #include <stdlib.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#include <SDL/SDL_ttf.h>
-#include "enigme.h"
+
+#include "entity.h"
+
+
 #define LARGEUR 1100
 #define HAUTEUR 400
-
+//declaration SDL
 SDL_Surface* screen=NULL;
 SDL_Rect screenrect={0,0,0,0};
 SDL_Surface* backg=NULL;
+SDL_Surface* backg1=NULL;
 SDL_Rect backgrect={0,0,0,0};
 SDL_Surface* tmp=NULL;
+SDL_Event ev;
+
 
 int main()
 {
+//Declaration
 
+entity es;
+
+
+int keys=2;
 SDL_Init(SDL_INIT_VIDEO);
 const SDL_VideoInfo *pinfo=SDL_GetVideoInfo();
 int bpp=pinfo->vfmt->BitsPerPixel;
-int running=1;
-
+int now=0;
+int ex=0;
+int pfps=33;
+int dt=0;
+int test;
 screen=SDL_SetVideoMode(LARGEUR,HAUTEUR,bpp,SDL_HWSURFACE);
-SDL_WM_SetCaption("Enigme",NULL);
 
 //background
-tmp=SDL_LoadBMP("res/background.bmp");
+tmp=IMG_Load("res/gamebackg.png");
 backg=SDL_DisplayFormat(tmp);
-SDL_FreeSurface(tmp);
+
 SDL_GetClipRect(backg,&backgrect);
-enigme e;
-generation_question(&e);
-init_enigme(&e);
+
+initialise_entity(&es);
 
 
-while(running)
+
+//boucle Game.x
+while(1)
 {
-SDL_Event event;
-SDL_PollEvent(&event);
-SDL_BlitSurface(backg,NULL,screen,&backgrect);
+now=SDL_GetTicks();
+dt=now-ex;
+backg=SDL_DisplayFormat(tmp);
+if(dt>=pfps)
+{
 
-affichage(&e,screen);
-running=resolution(&e,event);
 
+//affichage
+SDL_PollEvent(&ev);
+
+
+afficher_entity(&es,backg,&backgrect);
+
+
+
+deplacement_alea_ennemi(&es);
+
+
+
+//display #ALL
 SDL_Flip(screen);
-}
-freesur(&e);
 SDL_FreeSurface(backg);
+}
+else 
+ SDL_Delay(pfps-dt);
+}
+
+//#FREE!!!!!!!!!!!!!!!
+
+
+
+
 SDL_Quit();
 return 0;
 }
+
