@@ -6,7 +6,7 @@
 #include <string.h>
 #include <time.h>
 #include "enigme.h"
-void generation_question(enigme *E)
+void generation_question(enigme *E, int dif)// fabrication question 
 {
 
 
@@ -15,8 +15,17 @@ srand( time(NULL) );
 int a=0,b=0,c=0,d=0;
 E->random=1;
 E->random= rand() %2+1;
+if(dif==1){
 a=rand() %50+1;
-b=rand() %90+1;
+b=rand() %90+1;}
+if(dif==2){
+a=rand() %250+1;
+b=rand() %400+1;}
+
+if(dif==3){
+a=rand() %400+1;
+b=rand() %700+1;}
+
 c=a*b;
 d=rand()%c;
 if(E->random==1){
@@ -51,12 +60,12 @@ E->no=IMG_Load("b.jpg");
 	E->rzlt.y=0;
 	E->rzlt.h=705;
 	E->rzlt.w=1300;
-	E->couleurtexte.r = 0;
+	E->couleurtexte.r = 0;//noir
 	E->couleurtexte.g = 0;
 	E->couleurtexte.b = 0;
 
 	E->couleur.r = 255;
-	E->couleur.g = 255;
+	E->couleur.g = 255;//blanc
 	E->couleur.b = 255;
 	E->fonttexte=TTF_OpenFont("res/o.ttf",30);
  	E->re3=TTF_RenderText_Solid(E->fonttexte,E->rep1,E->couleurtexte);
@@ -98,7 +107,7 @@ break;}
 
 }
 
-void affichage(enigme *E,SDL_Surface *screen)
+void affichage(enigme *E,SDL_Surface *screen,int *vie,int *key)
 {
 
 
@@ -113,19 +122,25 @@ SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 255, 255, 255));
 if(E->random==1){
 
 if(E->reponse==0){
-	SDL_BlitSurface(E->no, NULL,screen,&E->rzlt);
+vie--;	
+SDL_BlitSurface(E->no, NULL,screen,&E->rzlt);
+        
 }
 if(E->reponse==1){
-	SDL_BlitSurface(E->yes, NULL,screen,&E->rzlt);
+key++;	
+SDL_BlitSurface(E->yes, NULL,screen,&E->rzlt);
+        
 }
 }
 if(E->random==2){
 
 if(E->reponse==0){
 	SDL_BlitSurface(E->yes, NULL,screen,&E->rzlt);
+        key++;
 }
 if(E->reponse==1){
 	SDL_BlitSurface(E->no, NULL,screen,&E->rzlt);
+        vie--;
 }
 }
 }

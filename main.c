@@ -2,86 +2,69 @@
 #include <stdlib.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-
-#include "entity.h"
-
-#include "scrol.h"
+#include <SDL/SDL_ttf.h>
+#include "enigme.h"
+#include <SDL/SDL_rotozoom.h>
+#include<time.h>
 #define LARGEUR 1100
 #define HAUTEUR 400
-//declaration SDL
+
 SDL_Surface* screen=NULL;
 SDL_Rect screenrect={0,0,0,0};
 SDL_Surface* backg=NULL;
-SDL_Surface* backg1=NULL;
 SDL_Rect backgrect={0,0,0,0};
 SDL_Surface* tmp=NULL;
-SDL_Event ev;
-
 
 int main()
 {
-//Declaration
-
-entity es;
-scr s;
-
-int keys=2;
-SDL_Init(SDL_INIT_VIDEO);
+int dif=3;
+SDL_Init(SDL_INIT_VIDEO);//debut de utilisation sdl 
 const SDL_VideoInfo *pinfo=SDL_GetVideoInfo();
 int bpp=pinfo->vfmt->BitsPerPixel;
-int now=0;
-int ex=0;
-int pfps=33;
-int dt=0;
-int test;
+int running=1;
+
 screen=SDL_SetVideoMode(LARGEUR,HAUTEUR,bpp,SDL_HWSURFACE);
-SDL_WM_SetCaption("Perso",NULL);
+SDL_WM_SetCaption("Enigme",NULL);
+
 //background
-tmp=IMG_Load("res/gamebackg.png");
-backg=SDL_DisplayFormat(tmp);
 
+tmp=SDL_LoadBMP("res/background.bmp");
+backg=SDL_DisplayFormat(tmp);
+SDL_FreeSurface(tmp);
 SDL_GetClipRect(backg,&backgrect);
+enigme e;
+generation_question(&e,dif);
+init_enigme(&e);
+int vie=3;
+int keys=0;
+SDL_Surface *rotation;
+	double angle = 200;
+    	double zoom = 0;
 
-initialise_entity(&es);
-
-initscrol(&s);
-
-//boucle Game.x
-while(1)
+	while(zoom<1 || angle >0)
+	{
+		angle-=4;
+		zoom+=0.02;
+		rotation = rotozoomSurface(backg, angle, zoom, 0);
+		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
+		SDL_BlitSurface(rotation,NULL,screen,NULL);
+		SDL_FreeSurface(rotation);
+		SDL_Delay(50);
+		SDL_Flip(screen);
+	}
+while(running)
 {
-now=SDL_GetTicks();
-dt=now-ex;
-backg=SDL_DisplayFormat(tmp);
-if(dt>=pfps)
-{
+SDL_Event event;
+SDL_PollEvent(&event);
+SDL_BlitSurface(backg,NULL,screen,&backgrect);
 
+affichage(&e,screen,&vie,&keys);
+running=resolution(&e,event);
 
-//affichage
-SDL_PollEvent(&ev);
-
-
-afficher_entity(&es,backg,&backgrect);
-scrolling(&s,screen,backg,0,backgrect);
-
-
-deplacement_alea_ennemi(&es);
-
-
-
-//display #ALL
 SDL_Flip(screen);
+}
+freesur(&e);
 SDL_FreeSurface(backg);
-}
-else 
- SDL_Delay(pfps-dt);
-}
-
-//#FREE!!!!!!!!!!!!!!!
-
-
-
-
 SDL_Quit();
 return 0;
 }
-
