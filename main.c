@@ -1,9 +1,9 @@
 /**
 * @file main.c
-* @brief Game Enigme
-* @author aziz
+* @brief Integration Finale
+* @author Yosri Ghaba
 * @version Final
-* @date Juin 08, 2020
+* @date Juin 16, 2020
 *
 * *main Functions
 *
@@ -50,7 +50,7 @@ SDL_Event ev2;
 
 int main(int argc, char** argv)
 {
-    
+
 //Declaration
 mini e;
 mini e2;
@@ -105,7 +105,7 @@ char path1 [500] = "res/perso1.png";
 char path [500] = "res/perso.png";
 
 screen=SDL_SetVideoMode(LARGEUR,HAUTEUR,bpp,SDL_HWSURFACE);
-SDL_WM_SetCaption("Game",NULL);
+SDL_WM_SetCaption("Oussman Game",NULL);
 init_menu(&men);
 afficher_menu(screen,&men);
 //background
@@ -132,7 +132,7 @@ init_temp(&tempp);
 //initmode(&modee );
 //modegame1(screen,&modee);
 
-initcond(&cond); 
+initcond(&cond);
 
 init_positions(&e,x,y);
 init_positions1(&e2,x1,y);
@@ -201,7 +201,7 @@ scrolling(&s,screen,backg,p.position.x,backgrect);
 scrolling(&s2,screen,backg1,p2.position.x,backgrect1);
 
 
-p.running=moveperso2(&p2 ,screen,ev2); 
+p.running=moveperso2(&p2 ,screen,ev2);
 p.running=moveperso(&p ,screen,ev2);
 
 save1(p.vie,p.score,ev2,screen,&savee,tempp.timeTemps,p.position.x , p.position.y ,s.camera.x,p2.vie,p2.score,tempp.timeTemps,p2.position.x , p2.position.y ,s2.camera.x);
@@ -558,7 +558,7 @@ SDL_FreeSurface(backg);
 SDL_FreeSurface(backg1);
 
 }
-else 
+else
  SDL_Delay(pfps-dt);
 }
 }
@@ -581,7 +581,7 @@ ie = init_ennemi(&ennemi1, path_ennemi);
 
 init_temp(&tempp);
 
-initcond(&cond); 
+initcond(&cond);
 
 init_positions(&e,x,y);
 init_positions1(&e2,x1,y);
@@ -655,8 +655,8 @@ else
 if(men.dif==2)
 {
 p2.position.x+=6;
-} 
-else 
+}
+else
 if(men.dif==3){
 p2.position.x+=10;
 }
@@ -916,11 +916,11 @@ SDL_FreeSurface(backg);
 SDL_FreeSurface(backg1);
 
 }
-else 
+else
  SDL_Delay(pfps-dt);
 }
 }
-else 
+else
 if(men.mode==1)
 {
 /************************************************SOLOOOOOOOOOOOOOOOOOOO***************************************************************/
@@ -1174,7 +1174,7 @@ SDL_FreeSurface(backg1);
 
 }
 
-else 
+else
  SDL_Delay(pfps-dt);
 }
 
